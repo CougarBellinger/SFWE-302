@@ -42,6 +42,7 @@ public class FileOut {
         }
 
         PdfWriter.getInstance(doc, new FileOutputStream(file));
+
         doc.open();
         doc.add(table);
         doc.close();

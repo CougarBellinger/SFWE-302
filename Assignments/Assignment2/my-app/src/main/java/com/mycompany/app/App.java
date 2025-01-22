@@ -1,26 +1,18 @@
 package com.mycompany.app;
 
-import java.util.Scanner;
-
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.pdf.PdfWriter;
 
 public class App {
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		if (args[0] == "PDF") {
+	public static void main(String[] args) throws FileNotFoundException, IOException, DocumentException {
+		System.out.printf("Entered:\n1: \"%s\"\n2: \"%s\n", args[0], args[1]);
+		if (args[0].equalsIgnoreCase("PDF")) {
 			FileOut.PDF(args[1]);
 		}
 
-		else if (args[0] == "XLS") {
+		else if (args[0].equalsIgnoreCase("XLS")) {
 			FileOut.XLS(args[1]);
 		}
 
