@@ -1,7 +1,10 @@
 package com.mycompany.app;
 
+import java.util.Scanner;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -11,20 +14,18 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.PdfWriter;
 
-/**
- * Hello world!
- */
 public class App {
-	public static void main(String[] args) throws DocumentException, FileNotFoundException {
-		Document document = new Document();
+	public static void main(String[] args) throws FileNotFoundException, IOException {
+		if (args[0] == "PDF") {
+			FileOut.PDF(args[1]);
+		}
 
-		PdfWriter.getInstance(document, new FileOutputStream("iTextHelloWorld.pdf"));
+		else if (args[0] == "XLS") {
+			FileOut.XLS(args[1]);
+		}
 
-		document.open();
-		Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-		Chunk chunk = new Chunk("Hello World", font);
-
-		document.add(chunk);
-		document.close();
+		else {
+			System.out.printf("Invalid parameters\nExpected parameters: <PDF|XLS> <file name>\n");
+		}
 	}
 }
