@@ -8,6 +8,7 @@ import com.itextpdf.text.DocumentException;
 public class App {
 	public static void main(String[] args) throws FileNotFoundException, IOException, DocumentException {
 		System.out.printf("Entered:\n1: \"%s\"\n2: \"%s\n", args[0], args[1]);
+
 		if (args[0].equalsIgnoreCase("PDF")) {
 			FileOut.PDF(args[1]);
 		}
