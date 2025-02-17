@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,13 +22,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class MyListDemo extends URLLoader {
     protected List<Product> list = new ArrayList<>();
+    protected Set<String> resultSet = new HashSet<>();
 
     @Override
     protected void processLine(String tokens) {
     }
 
     @Override
-    protected void processLine(String[] tokens) {
+    public void processLine(String[] tokens) {
         if (tokens[7].equalsIgnoreCase("British Columbia")) {
             Product product = new Product();
             product.setId(Long.parseLong(tokens[0]));
@@ -38,6 +41,12 @@ public class MyListDemo extends URLLoader {
             product.setCategory(tokens[8]);
 
             list.add(product);
+        }
+    }
+
+    protected void applySearch() {
+        for (Product product : list) {
+            resultSet.add(product.getName());
         }
     }
 
@@ -81,8 +90,11 @@ public class MyListDemo extends URLLoader {
     public static void main(String[] args) {
         MyListDemo myListDemo = new MyListDemo();
         myListDemo.loadData();
-        System.out.println(myListDemo.list.size());
 
+        myListDemo.applySearch();
+
+        System.out.println(myListDemo.list.size());
         myListDemo.createXLS();
+        System.out.println(myListDemo.resultSet.size());
     }
 }
