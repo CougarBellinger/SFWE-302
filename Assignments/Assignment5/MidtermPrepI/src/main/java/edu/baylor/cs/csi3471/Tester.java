@@ -15,7 +15,7 @@ public class Tester {
 
 	private static int readOption(String[] args) {
 		Integer option = null;
-		if (args.length != /* what is the expected length */) {
+		if (args.length != 3) {
 			System.err.println("USAGE: java Tester <filename>");
 			System.exit(1);
 		} else {
@@ -33,6 +33,7 @@ public class Tester {
 	 * public static Collection<Make> populateSet(Collection<Make> set, String[]
 	 * line){ //check the colleciton for existing make }
 	 */
+
 
 	private static Set<Make> loadCSV(String file) throws FileNotFoundException {
 		BufferedReader reader = null;

@@ -1,10 +1,15 @@
 package edu.baylor.cs.csi3471;
 
+import java.util.Collection;
 import java.util.Set;
 
 public class Make {
 
 	private Set<ModelSettings> modelSettingSet;
+
+	public Make(Set<ModelSettings> modelSettingSet) {
+		this.modelSettingSet = modelSettingSet;
+	}
 
 	public Set<ModelSettings> getModelSettingSet() {
 		return modelSettingSet;
@@ -16,25 +21,27 @@ public class Make {
 
 	@Override
 	public int hashCode() {
-		// TODO generate using eclipse/intellij source code autogenerator
-		return -1;
-	}
-
-	@Override
-	public String toString() {
-		// TODO generate using eclipse/intellij source code autogenerator
-		return "";
-	}
-
-	public Make(String[] line) {
-		// TODO generate using eclipse/intellij source code autogenerator
-		super();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((modelSettingSet == null) ? 0 : modelSettingSet.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO generate using eclipse/intellij source code autogenerator
-		return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Make other = (Make) obj;
+		if (modelSettingSet == null) {
+			if (other.modelSettingSet != null)
+				return false;
+		} else if (!modelSettingSet.equals(other.modelSettingSet))
+			return false;
+		return true;
 	}
 
 	// there are 2 options, do this functionality here(its static),
@@ -48,4 +55,10 @@ public class Make {
 		}
 		return makes;
 	}
+
+	@Override
+	public String toString() {
+		return "Make [modelSettingSet=" + modelSettingSet + ", hashCode()=" + hashCode() + "]";
+	}
+
 }
