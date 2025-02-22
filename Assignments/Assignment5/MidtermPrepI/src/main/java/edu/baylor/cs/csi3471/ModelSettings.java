@@ -3,13 +3,15 @@ package edu.baylor.cs.csi3471;
 public class ModelSettings {
 
 	public static class MPG {
-		// City 	-> [1]
-		// Combined -> [2]
-		// Highway 	-> [3]
-		private Integer[] mpg = new Integer[3];
+		private String[] mpg = new String[3];
+		// City 	-> [0]
+		// Combined -> [1]
+		// Highway 	-> [2]
 
 		public MPG(String[] line){
-			//TODO
+			mpg[0] = line[0];
+			mpg[1] = line[1];
+			mpg[2] = line[2]; 
 		}
 
 		@Override
@@ -18,12 +20,13 @@ public class ModelSettings {
 		}
 	}
 
-	private static Integer idCounter = 0;
-	private Integer uniqueId;
+	private static int idCounter = 0;
+	private int uniqueId;
 
 	private MPG mpg = null;
 	private Make make = null;
-	private String cylinders, displacement, fuelType, modelName, transmission, vClass, year = null;
+
+	private String makeName, cylinders, displacement, fuelType, modelName, transmission, vClass, year = null;
 
 	public MPG getMpg() {
 		return mpg;
@@ -33,23 +36,39 @@ public class ModelSettings {
 		this.mpg = mpg;
 	}
 
-	
 	public ModelSettings(String[] line) {
 		// line:
 		// city08,comb08,cylinders,displ,fuelType,highway08,make,model,trany,VClass,year
-		uniqueId = idCounter;
-		++idCounter;
+		this.uniqueId = idCounter++;
 
-		this.mpg = new MPG(new String[] {line[0], line[1], line[5]});
+		this.mpg = new MPG(new String[] { line[0], line[1], line[5] });
+
 		this.cylinders = line[2];
 		this.displacement = line[3];
 		this.fuelType = line[4];
+		this.makeName = line[6];
 		this.modelName = line[7];
 		this.transmission = line[8];
 		this.vClass = line[9];
 		this.year = line[10];
-		
-		// this.make = line[6];  TODO
+	}
+
+	public ModelSettings(String[] line, Make make) {
+		// line:
+		// city08,comb08,cylinders,displ,fuelType,highway08,make,model,trany,VClass,year
+		this.uniqueId = idCounter++;
+
+		this.mpg = new MPG(new String[] {line[0], line[1], line[5]});
+		this.make = make;
+
+		this.cylinders = line[2];
+		this.displacement = line[3];
+		this.fuelType = line[4];
+		this.makeName = line[6];
+		this.modelName = line[7];
+		this.transmission = line[8];
+		this.vClass = line[9];
+		this.year = line[10];
 	}
 
 	@Override
@@ -130,8 +149,5 @@ public class ModelSettings {
 			return false;
 		return true;
 	}
-
-	
-
 
 }

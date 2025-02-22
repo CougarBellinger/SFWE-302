@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Tester {
@@ -38,21 +38,18 @@ public class Tester {
 	private static Set<Make> loadCSV(String file) throws FileNotFoundException {
 		BufferedReader reader = null;
 		try {
-			// ok, this is much faster than scanner :)
 			reader = new BufferedReader(new FileReader(new File(file)));
 			String line = null;
+			Set<Make> makes = new HashSet<>();
 			while ((line = reader.readLine()) != null) {
 				String[] split = line.split(",");
 				// just to debug
 				System.out.println(split[6] + " : " + split[7]);
 
-				// do your magic here to get Make set, look at Make.java for
-				// a hint
-
+				makes = Make.creatorPattern(split, makes);
 			}
 
-			// TODO fix this!
-			return Collections.<Make>emptySet();
+			return makes;
 		} catch (IOException e) {
 			String hint = "";
 			try {
