@@ -5,8 +5,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Tester {
 
@@ -15,18 +18,92 @@ public class Tester {
 
 	private static int readOption(String[] args) {
 		Integer option = null;
-		if (args.length != 3) {
-			System.err.println("USAGE: java Tester <filename>");
+
+		if (args.length < 2) {
+			System.err.println("USAGE: java Tester <1-4> <filename>");
 			System.exit(1);
 		} else {
 			try {
 				option = Integer.parseInt(args[OPTION]);
 			} catch (NumberFormatException e) {
-				System.err.println("call as java Tester <filename>");
+				System.err.println("call as java Tester <1-4> <filename>");
 				System.exit(1);
 			}
 		}
 		return option;
+	}
+
+	private static void executeOption(Set<Make> makes, int option, String[] args){
+		switch (option) {
+			case 1:
+				Comparator<Make> compareMake = Comparator.comparing(Make::getMakeName).reversed();
+				TreeSet<Make> sortedMakes = new TreeSet<>(compareMake);
+				sortedMakes.addAll(makes);
+
+				System.out.println("Total makes: " + makes.size());
+				System.out.println("===============");
+
+				for(Make make : sortedMakes){
+					System.out.println(make.getMakeName() + " has " + make.getModelSettingSet().size() + " models");
+				}
+
+				System.out.println("===============");
+
+				for(Make make : sortedMakes){
+					System.out.println(make);
+				}
+
+				break;
+
+			case 2:
+				if (args[2].equalsIgnoreCase("makename")){
+					Set<Make> filteredMakes = new TreeSet<Make>();
+					
+					for(Make make : makes){
+						if (make.getMakeName().contains(args[3])){
+							filteredMakes.add(make);
+						}
+					}
+					
+					System.out.println("Make names containing: \"" + args[2] + "\"");
+					
+					for(Make make : filteredMakes){
+						System.out.println(make.getMakeName());
+					}
+					
+				}
+				else if(args[2].equalsIgnoreCase("model")){
+					Set<Make> filteredMakes = new TreeSet<Make>();
+
+					for(Make make : makes) {
+						for(ModelSettings model : make.getModelSettingSet()){
+							if (model.getModelName().contains(args[2])){
+								filteredMakes.add(make);
+							}
+						}
+					}
+
+					System.out.println("Makes with model names containing: \"" + args[2] + "\"");
+
+					for (Make make : filteredMakes) {
+						System.out.println(make.getMakeName());
+					}
+
+				}
+				else{
+					System.out.println("Unable to read, please type \"makename\" or \"modelname\"");
+				}
+				break;
+
+			case 3: //TODO
+				break;
+
+			case 4: //TODO
+				break;
+		
+			default:
+				break;
+		}
 	}
 
 	/*
@@ -39,17 +116,28 @@ public class Tester {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(new File(file)));
+
 			String line = null;
 			Set<Make> makes = new HashSet<>();
+
 			while ((line = reader.readLine()) != null) {
 				String[] split = line.split(",");
-				// just to debug
-				System.out.println(split[6] + " : " + split[7]);
 
-				makes = Make.creatorPattern(split, makes);
+				if(split.length != 11){
+					continue;
+				}
+
+				//System.out.println(split[6] + " : " + split[7]);
+
+				try{
+					makes = Make.creatorPattern(split, makes);
+				} catch (NumberFormatException nfe){
+					continue;
+				}
 			}
 
 			return makes;
+
 		} catch (IOException e) {
 			String hint = "";
 			try {
@@ -72,14 +160,22 @@ public class Tester {
 	}
 
 	public static void main(String[] args) {
-		int option = readOption(args);
+		int option = 1;
+		//int option = readOption(args);
+		
+		String file = "src/main/resources/vehiclesMini.csv";
+		// String file = args[FILE_NAME];
 
 		Set<Make> makes = null;
 		try {
-			makes = loadCSV(args[FILE_NAME]);
+			makes = loadCSV(file);
+
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getLocalizedMessage());
 			System.exit(1);
 		}
+
+		executeOption(makes, option, args);
+		
 	}
 }

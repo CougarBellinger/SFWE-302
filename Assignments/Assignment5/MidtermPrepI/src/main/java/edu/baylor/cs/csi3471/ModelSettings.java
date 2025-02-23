@@ -3,20 +3,28 @@ package edu.baylor.cs.csi3471;
 public class ModelSettings {
 
 	public static class MPG {
-		private String[] mpg = new String[3];
+		private Integer[] mpg = new Integer[3];
 		// City 	-> [0]
 		// Combined -> [1]
 		// Highway 	-> [2]
 
 		public MPG(String[] line){
-			mpg[0] = line[0];
-			mpg[1] = line[1];
-			mpg[2] = line[2]; 
+			mpg[0] = Integer.parseInt(line[0]);
+			mpg[1] = Integer.parseInt(line[1]);
+			mpg[2] = Integer.parseInt(line[2]); 
 		}
 
 		@Override
 		public String toString() {
-			return mpg[1] + "/" + mpg[2] + "/" + mpg[3];
+			return mpg[0] + "/" + mpg[1] + "/" + mpg[2];
+		}
+
+		public Integer[] getMpg() {
+			return mpg;
+		}
+
+		public void setMpg(Integer[] mpg) {
+			this.mpg = mpg;
 		}
 	}
 
@@ -25,8 +33,15 @@ public class ModelSettings {
 
 	private MPG mpg = null;
 	private Make make = null;
+	
+	private Double displacement = null;
+	private Integer cylinders, year = null;
 
-	private String makeName, cylinders, displacement, fuelType, modelName, transmission, vClass, year = null;
+	private String makeName = null;
+	private String fuelType= null;
+	private String modelName = null;
+	private String transmission = null;
+	private String vClass = null;
 
 	public MPG getMpg() {
 		return mpg;
@@ -36,45 +51,56 @@ public class ModelSettings {
 		this.mpg = mpg;
 	}
 
+	public String getModelName(){
+		return this.modelName;
+	}
+
+	public Make getMake(){
+		return this.make;
+	}
+
+	public void setMake(Make make){
+		this.make = make;
+	}
+
+	// city08,comb08,cylinders,displ,fuelType,highway08,make,model,trany,VClass,year
 	public ModelSettings(String[] line) {
-		// line:
-		// city08,comb08,cylinders,displ,fuelType,highway08,make,model,trany,VClass,year
 		this.uniqueId = idCounter++;
 
 		this.mpg = new MPG(new String[] { line[0], line[1], line[5] });
 
-		this.cylinders = line[2];
-		this.displacement = line[3];
 		this.fuelType = line[4];
 		this.makeName = line[6];
 		this.modelName = line[7];
 		this.transmission = line[8];
 		this.vClass = line[9];
-		this.year = line[10];
+		
+		this.displacement = Double.parseDouble(line[3]);
+		this.cylinders = Integer.parseInt(line[2]);
+		this.year = Integer.parseInt(line[10]);
 	}
 
 	public ModelSettings(String[] line, Make make) {
-		// line:
-		// city08,comb08,cylinders,displ,fuelType,highway08,make,model,trany,VClass,year
 		this.uniqueId = idCounter++;
 
-		this.mpg = new MPG(new String[] {line[0], line[1], line[5]});
+		this.mpg = new MPG(new String[] { line[0], line[1], line[5] });
 		this.make = make;
 
-		this.cylinders = line[2];
-		this.displacement = line[3];
 		this.fuelType = line[4];
 		this.makeName = line[6];
 		this.modelName = line[7];
 		this.transmission = line[8];
 		this.vClass = line[9];
-		this.year = line[10];
+
+		this.displacement = Double.parseDouble(line[3]);
+		this.cylinders = Integer.parseInt(line[2]);
+		this.year = Integer.parseInt(line[10]);
 	}
 
 	@Override
 	public String toString() {
 		return modelName + " " + year + " v" + cylinders + " " + displacement + " " + fuelType + " "
-			+ make + " " + transmission + " " + vClass + " " + mpg;
+			+ makeName + " " + transmission + " " + vClass + " " + mpg;
 	}
 
 	@Override
@@ -83,13 +109,14 @@ public class ModelSettings {
 		int result = 1;
 		result = prime * result + ((mpg == null) ? 0 : mpg.hashCode());
 		result = prime * result + ((make == null) ? 0 : make.hashCode());
-		result = prime * result + ((cylinders == null) ? 0 : cylinders.hashCode());
 		result = prime * result + ((displacement == null) ? 0 : displacement.hashCode());
+		result = prime * result + ((cylinders == null) ? 0 : cylinders.hashCode());
+		result = prime * result + ((year == null) ? 0 : year.hashCode());
+		result = prime * result + ((makeName == null) ? 0 : makeName.hashCode());
 		result = prime * result + ((fuelType == null) ? 0 : fuelType.hashCode());
 		result = prime * result + ((modelName == null) ? 0 : modelName.hashCode());
 		result = prime * result + ((transmission == null) ? 0 : transmission.hashCode());
 		result = prime * result + ((vClass == null) ? 0 : vClass.hashCode());
-		result = prime * result + ((year == null) ? 0 : year.hashCode());
 		return result;
 	}
 
@@ -112,15 +139,25 @@ public class ModelSettings {
 				return false;
 		} else if (!make.equals(other.make))
 			return false;
+		if (displacement == null) {
+			if (other.displacement != null)
+				return false;
+		} else if (!displacement.equals(other.displacement))
+			return false;
 		if (cylinders == null) {
 			if (other.cylinders != null)
 				return false;
 		} else if (!cylinders.equals(other.cylinders))
 			return false;
-		if (displacement == null) {
-			if (other.displacement != null)
+		if (year == null) {
+			if (other.year != null)
 				return false;
-		} else if (!displacement.equals(other.displacement))
+		} else if (!year.equals(other.year))
+			return false;
+		if (makeName == null) {
+			if (other.makeName != null)
+				return false;
+		} else if (!makeName.equals(other.makeName))
 			return false;
 		if (fuelType == null) {
 			if (other.fuelType != null)
@@ -142,12 +179,8 @@ public class ModelSettings {
 				return false;
 		} else if (!vClass.equals(other.vClass))
 			return false;
-		if (year == null) {
-			if (other.year != null)
-				return false;
-		} else if (!year.equals(other.year))
-			return false;
 		return true;
 	}
 
+	
 }

@@ -1,5 +1,6 @@
 package edu.baylor.cs.csi3471;
 
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +20,9 @@ public class Make {
 	
 	public Make(ModelSettings model, String name) {
 		this.modelSettingSet = new HashSet<>();
-		modelSettingSet.add(model);
+
+		model.setMake(this);
+		this.modelSettingSet.add(model);
 
 		this.makeName = name;
 
@@ -37,31 +40,6 @@ public class Make {
 	// may not need
 	public void setModelSettingSet(Set<ModelSettings> modelSettingSet) {
 		this.modelSettingSet = modelSettingSet;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((modelSettingSet == null) ? 0 : modelSettingSet.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Make other = (Make) obj;
-		if (modelSettingSet == null) {
-			if (other.modelSettingSet != null)
-				return false;
-		} else if (!modelSettingSet.equals(other.modelSettingSet))
-			return false;
-		return true;
 	}
 
 	// there are 2 options, do this functionality here(its static),
@@ -95,7 +73,39 @@ public class Make {
 
 	@Override
 	public String toString() {
-		return "Make [modelSettingSet=" + modelSettingSet + ", hashCode()=" + hashCode() + "]";
+		String out = makeName + "\n";
+
+		for(ModelSettings model : this.modelSettingSet){
+			out += model + "\n";
+		}
+
+		return out;
+	}
+
+	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Make other = (Make) obj;
+		if (uniqueId != other.uniqueId)
+			return false;
+		if (modelSettingSet == null) {
+			if (other.modelSettingSet != null)
+				return false;
+		} else if (!modelSettingSet.equals(other.modelSettingSet))
+			return false;
+		if (makeName == null) {
+			if (other.makeName != null)
+				return false;
+		} else if (!makeName.equals(other.makeName))
+			return false;
+		return true;
 	}
 
 	
