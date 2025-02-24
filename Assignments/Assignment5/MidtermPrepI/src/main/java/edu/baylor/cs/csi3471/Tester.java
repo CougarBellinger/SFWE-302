@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -95,10 +97,49 @@ public class Tester {
 				break;
 
 			case 3: //TODO
-				
+
+				Set<ModelSettings> masterModelSettings = new HashSet<ModelSettings>();
+
+				for(Make make : makes){
+					masterModelSettings.addAll(make.getModelSettingSet());
+				}
+
+				// create mapping of a string to a set of models
+				Map<String, Set<ModelSettings>> categorizedModelSettings = new HashMap<>();
+
+				for(ModelSettings model : masterModelSettings){
+					String vClass = model.getVClass();
+
+					// if vClass doesn't exist in map, create new entry
+					if(!categorizedModelSettings.containsKey(vClass)){
+						categorizedModelSettings.put(vClass, new HashSet<>());
+					}
+
+					// add model to its relative vClass entry in the map
+					categorizedModelSettings.get(vClass).add(model);
+				}
+
+				System.out.println("vClass -> Average Combined MPG:");
+				for(Map.Entry<String, Set<ModelSettings>> entry : categorizedModelSettings.entrySet()){
+					String vClass = entry.getKey();
+					Set<ModelSettings> models = entry.getValue();
+					Integer total = models.size();
+					Double combinedMPGSum = 0.0;
+					Double averageMPG;
+
+					for (ModelSettings model : models) {
+						combinedMPGSum += model.getCombinedMPG();	
+					}
+
+					averageMPG = combinedMPGSum / total;
+
+					System.out.printf("%s: Avg of %.2f Combined MPG\n", vClass, averageMPG);
+				}
+
 				break;
 
 			case 4: //TODO
+				
 				break;
 		
 			default:
@@ -161,7 +202,7 @@ public class Tester {
 
 	public static void main(String[] args) {
 		String file = "src/main/resources/vehiclesMini.csv";
-		String[] testArgs = {"2", file, "modelname", "a"}; //used for debugging
+		String[] testArgs = {"3", file}; //used for debugging
 
 		int option = readOption(testArgs);
 

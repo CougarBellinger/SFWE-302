@@ -47,6 +47,14 @@ public class ModelSettings {
 		return mpg;
 	}
 
+	public Integer getCombinedMPG(){
+		return this.mpg.getMpg()[1];
+	}
+
+	public String getVClass(){
+		return this.vClass;
+	}
+
 	public void setMpg(MPG mpg) {
 		this.mpg = mpg;
 	}
