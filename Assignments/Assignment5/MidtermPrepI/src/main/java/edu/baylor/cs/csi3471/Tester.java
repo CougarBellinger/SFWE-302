@@ -240,7 +240,7 @@ public class Tester {
 		String file = "src/main/resources/vehiclesMini.csv";
 		String[] testArgs = {"4", file}; //used for debugging
 
-		int option = readOption(testArgs);
+		int option = readOption(args);
 
 		//int option = readOption(args);
 
@@ -255,7 +255,7 @@ public class Tester {
 			System.exit(1);
 		}
 
-		executeOption(makes, option, testArgs);
+		executeOption(makes, option, args);
 		
 	}
 }
