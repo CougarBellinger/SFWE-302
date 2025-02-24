@@ -51,6 +51,10 @@ public class ModelSettings {
 		return this.mpg.getMpg()[1];
 	}
 
+	public Integer getYear() {
+		return this.year;
+	}
+
 	public String getVClass(){
 		return this.vClass;
 	}

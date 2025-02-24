@@ -96,8 +96,7 @@ public class Tester {
 				}
 				break;
 
-			case 3: //TODO
-
+			case 3:
 				Set<ModelSettings> masterModelSettings = new HashSet<ModelSettings>();
 
 				for(Make make : makes){
@@ -139,6 +138,43 @@ public class Tester {
 				break;
 
 			case 4: //TODO
+
+				Comparator<Make> compareMake1 = Comparator.comparing(Make::getMakeName);
+				Set<Make> filteredMakes1 = new TreeSet<>(compareMake1);
+				filteredMakes1.addAll(makes);
+
+				//Set<ModelSettings> masterModelSettings1 = new HashSet<ModelSettings>();
+
+				for (Make make : filteredMakes1){
+					// create mapping of a int to a set of models
+					Map<Integer, Set<ModelSettings>> modelSettingsByYear = new HashMap<>();
+
+					// same as option 3 but for year instead of vClass
+					for (ModelSettings model : make.getModelSettingSet()) {
+						Integer year = model.getYear();
+
+						if(year == null){
+							continue;
+						}
+
+						// if year doesn't exist in map, create new entry
+						if (!modelSettingsByYear.containsKey(year)) {
+							modelSettingsByYear.put(year, new HashSet<>());
+						}
+
+						// add model to its relative vClass entry in the map
+						modelSettingsByYear.get(year).add(model);
+					}
+
+					for (Map.Entry<Integer, Set<ModelSettings>> entry : modelSettingsByYear.entrySet()) {
+						Set<ModelSettings> models = entry.getValue();
+						Integer year = entry.getKey();
+
+						System.out.println("<" + make.getMakeName() + ";" + year + ";" + models.size() + ">");
+					}
+
+				}
+				
 				
 				break;
 		
@@ -202,7 +238,7 @@ public class Tester {
 
 	public static void main(String[] args) {
 		String file = "src/main/resources/vehiclesMini.csv";
-		String[] testArgs = {"3", file}; //used for debugging
+		String[] testArgs = {"4", file}; //used for debugging
 
 		int option = readOption(testArgs);
 
