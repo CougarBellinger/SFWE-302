@@ -13,8 +13,8 @@ import java.util.TreeSet;
 
 public class Tester {
 
-	private static final int FILE_NAME = 1;
 	private static final int OPTION = 0;
+	private static final int FILE_NAME = 1;
 
 	private static int readOption(String[] args) {
 		Integer option = null;
@@ -36,54 +36,53 @@ public class Tester {
 	private static void executeOption(Set<Make> makes, int option, String[] args){
 		switch (option) {
 			case 1:
-				Comparator<Make> compareMake = Comparator.comparing(Make::getMakeName).reversed();
-				TreeSet<Make> sortedMakes = new TreeSet<>(compareMake);
-				sortedMakes.addAll(makes);
+				Comparator<Make> compareMakeReversed = Comparator.comparing(Make::getMakeName).reversed();
+				TreeSet<Make> sortedMakesReversed = new TreeSet<>(compareMakeReversed);
+				sortedMakesReversed.addAll(makes);
 
 				System.out.println("Total makes: " + makes.size());
 				System.out.println("===============");
 
-				for(Make make : sortedMakes){
+				for(Make make : sortedMakesReversed){
 					System.out.println(make.getMakeName() + " has " + make.getModelSettingSet().size() + " models");
 				}
 
 				System.out.println("===============");
 
-				for(Make make : sortedMakes){
+				for(Make make : sortedMakesReversed){
 					System.out.println(make);
 				}
 
 				break;
 
 			case 2:
+				Comparator<Make> compareMake = Comparator.comparing(Make::getMakeName);
+				Set<Make> filteredMakes = new TreeSet<>(compareMake);
+
 				if (args[2].equalsIgnoreCase("makename")){
-					Set<Make> filteredMakes = new TreeSet<Make>();
-					
 					for(Make make : makes){
 						if (make.getMakeName().contains(args[3])){
 							filteredMakes.add(make);
 						}
 					}
 					
-					System.out.println("Make names containing: \"" + args[2] + "\"");
+					System.out.println("Make names containing \"" + args[3] + "\" sorted alphebetically:");
 					
 					for(Make make : filteredMakes){
 						System.out.println(make.getMakeName());
 					}
 					
 				}
-				else if(args[2].equalsIgnoreCase("model")){
-					Set<Make> filteredMakes = new TreeSet<Make>();
-
+				else if(args[2].equalsIgnoreCase("modelname")){
 					for(Make make : makes) {
 						for(ModelSettings model : make.getModelSettingSet()){
-							if (model.getModelName().contains(args[2])){
+							if (model.getModelName().contains(args[3])){
 								filteredMakes.add(make);
 							}
 						}
 					}
 
-					System.out.println("Makes with model names containing: \"" + args[2] + "\"");
+					System.out.println("Makes with model names containing \"" + args[3] + "\" sorted alphebetically:");
 
 					for (Make make : filteredMakes) {
 						System.out.println(make.getMakeName());
@@ -96,6 +95,7 @@ public class Tester {
 				break;
 
 			case 3: //TODO
+				
 				break;
 
 			case 4: //TODO
@@ -160,22 +160,25 @@ public class Tester {
 	}
 
 	public static void main(String[] args) {
-		int option = 1;
-		//int option = readOption(args);
-		
 		String file = "src/main/resources/vehiclesMini.csv";
+		String[] testArgs = {"2", file, "modelname", "a"}; //used for debugging
+
+		int option = readOption(testArgs);
+
+		//int option = readOption(args);
+
 		// String file = args[FILE_NAME];
 
 		Set<Make> makes = null;
 		try {
-			makes = loadCSV(file);
+			makes = loadCSV(testArgs[FILE_NAME]);
 
 		} catch (FileNotFoundException e) {
 			System.err.println(e.getLocalizedMessage());
 			System.exit(1);
 		}
 
-		executeOption(makes, option, args);
+		executeOption(makes, option, testArgs);
 		
 	}
 }
