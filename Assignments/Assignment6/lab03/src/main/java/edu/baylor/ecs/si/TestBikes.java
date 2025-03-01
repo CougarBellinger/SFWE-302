@@ -2,17 +2,15 @@ package edu.baylor.ecs.si;
 
 public class TestBikes {
     public static void main(String[] args) {
-        Bicycle bike01, bike02, bike03;
-
-        bike01 = new Bicycle(20, 10, 1);
-        bike02 = new MountainBike(20, 10, 5, "Dual");
-        bike03 = new RoadBike(40, 20, 8, 23);
+        Bicycle bike01 = new Bicycle(20, 10, 1);
+        Bicycle bike02 = new MountainBike(20, 10, 5, "Dual");
+        Bicycle bike03 = new RoadBike(40, 20, 8, 23);
 
         // bike01.printDescription();
 
         BasicService service1 = new BasicService();
-        MountainBikeService service2 = new MountainBikeService();
-        RoadBikeService service3 = new RoadBikeService();
+        BasicService service2 = new MountainBikeService();
+        BasicService service3 = new RoadBikeService();
 
         System.out.println("\nSingle dispatch:");
         service1.accept(bike01);
@@ -23,6 +21,5 @@ public class TestBikes {
         bike01.visit(service1);
         bike02.visit(service2);
         bike03.visit(service3);
-        /**/
     }
 }

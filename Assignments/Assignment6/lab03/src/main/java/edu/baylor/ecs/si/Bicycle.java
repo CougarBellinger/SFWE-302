@@ -37,3 +37,63 @@ public class Bicycle {
         bs.accept(this);
     }
 }
+
+class MountainBike extends Bicycle {
+    private String suspension;
+
+    public MountainBike(int startCadence, int startSpeed, int startGear, String suspensionType) {
+        super(startCadence, startSpeed, startGear);
+        this.setSuspension(suspensionType);
+    }
+
+    public String getSuspension() {
+        return this.suspension;
+    }
+
+    public void setSuspension(String suspensionType) {
+        this.suspension = suspensionType;
+    }
+
+    @Override
+    public void printDescription() {
+        System.out.print("\nBike is " + "in gear " + this.gear
+                + " with a cadence of " + this.cadence +
+                " and travelling at a speed of " + this.speed);
+        System.out.print(" with " + this.suspension + " suspension.\n");
+    }
+
+    @Override
+    public void visit(BasicService bs) {
+        bs.accept(this);
+    }
+}
+
+class RoadBike extends Bicycle {
+    private int tireWidth;
+
+    public RoadBike(int startCadence, int startSpeed, int startGear, int tireWidth) {
+        super(startCadence, startSpeed, startGear);
+        this.tireWidth = tireWidth;
+    }
+
+    public int getTireWidth() {
+        return tireWidth;
+    }
+
+    public void setTireWidth(int tireWidth) {
+        this.tireWidth = tireWidth;
+    }
+
+    @Override
+    public void printDescription() {
+        System.out.print("\nBike is " + "in gear " + this.gear
+                + " with a cadence of " + this.cadence +
+                " and travelling at a speed of " + this.speed);
+        System.out.print(" with tire width of " + this.tireWidth + "\n");
+    }
+
+    @Override
+    public void visit(BasicService bs) {
+        bs.accept(this);
+    }
+}
