@@ -82,7 +82,6 @@ public class Make {
 		return out;
 	}
 
-	
 
 	@Override
 	public boolean equals(Object obj) {
