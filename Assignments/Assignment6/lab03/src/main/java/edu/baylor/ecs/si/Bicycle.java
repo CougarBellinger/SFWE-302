@@ -1,14 +1,22 @@
 package edu.baylor.ecs.si;
 
 public class Bicycle {
-    public int cadence;
-    public int gear;
-    public int speed;
+    protected int cadence;
+    protected int gear;
+    protected int speed;
 
-    public Bicycle(int startCadence, int startSpeed, int startGear) {
+    protected BikeColor color;
+
+    public Bicycle(int startCadence, int startSpeed, int startGear, String startColor) {
         gear = startGear;
         cadence = startCadence;
         speed = startSpeed;
+
+        try {
+            color = BikeColor.valueOf(startColor.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.out.printf("Failed to instantiate bike color. Invalid color type\n");
+        }
     }
 
     public void setCadence(int newValue) {
@@ -28,12 +36,13 @@ public class Bicycle {
     }
 
     public void printDescription() {
-        System.out.println("\nBike is " + "in gear " + this.gear
+        System.out.println("  "
+                + color.getColorName() + " Bike is " + "in gear " + this.gear
                 + " with a cadence of " + this.cadence +
                 " and travelling at a speed of " + this.speed + ". ");
     }
 
-    public void visit(BasicService bs) {
+    public void visit(BicycleInterface bs) {
         bs.accept(this);
     }
 }
@@ -41,9 +50,9 @@ public class Bicycle {
 class MountainBike extends Bicycle {
     private String suspension;
 
-    public MountainBike(int startCadence, int startSpeed, int startGear, String suspensionType) {
-        super(startCadence, startSpeed, startGear);
-        this.setSuspension(suspensionType);
+    public MountainBike(int startCadence, int startSpeed, int startGear, String startColor, String suspension) {
+        super(startCadence, startSpeed, startGear, startColor);
+        this.suspension = suspension;
     }
 
     public String getSuspension() {
@@ -56,14 +65,15 @@ class MountainBike extends Bicycle {
 
     @Override
     public void printDescription() {
-        System.out.print("\nBike is " + "in gear " + this.gear
+        System.out.print("  "
+                + color.getColorName() + " Mountain Bike is " + "in gear " + this.gear
                 + " with a cadence of " + this.cadence +
                 " and travelling at a speed of " + this.speed);
         System.out.print(" with " + this.suspension + " suspension.\n");
     }
 
     @Override
-    public void visit(BasicService bs) {
+    public void visit(BicycleInterface bs) {
         bs.accept(this);
     }
 }
@@ -71,8 +81,8 @@ class MountainBike extends Bicycle {
 class RoadBike extends Bicycle {
     private int tireWidth;
 
-    public RoadBike(int startCadence, int startSpeed, int startGear, int tireWidth) {
-        super(startCadence, startSpeed, startGear);
+    public RoadBike(int startCadence, int startSpeed, int startGear, String startColor, int tireWidth) {
+        super(startCadence, startSpeed, startGear, startColor);
         this.tireWidth = tireWidth;
     }
 
@@ -86,14 +96,15 @@ class RoadBike extends Bicycle {
 
     @Override
     public void printDescription() {
-        System.out.print("\nBike is " + "in gear " + this.gear
+        System.out.print("  "
+                + color.getColorName() + " Road Bike is " + "in gear " + this.gear
                 + " with a cadence of " + this.cadence +
                 " and travelling at a speed of " + this.speed);
         System.out.print(" with tire width of " + this.tireWidth + "\n");
     }
 
     @Override
-    public void visit(BasicService bs) {
+    public void visit(BicycleInterface bs) {
         bs.accept(this);
     }
 }
