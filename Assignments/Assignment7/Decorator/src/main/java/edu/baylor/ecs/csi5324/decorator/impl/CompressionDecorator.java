@@ -55,6 +55,7 @@ public class CompressionDecorator extends DataSourceDecorator {
 		// convert byte data via inflater to ByteArrayOutputStream
 		// ..
 		// return new String(bout.toByteArray());
+
 		return null;
 
 	}
