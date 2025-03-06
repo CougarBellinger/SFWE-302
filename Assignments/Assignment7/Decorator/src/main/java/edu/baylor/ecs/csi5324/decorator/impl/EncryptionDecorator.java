@@ -1,4 +1,5 @@
 package edu.baylor.ecs.csi5324.decorator.impl;
+
 import java.util.Base64;
 
 import edu.baylor.ecs.csi5324.decorator.DataSource;
@@ -30,10 +31,14 @@ public class EncryptionDecorator extends DataSourceDecorator {
 
     private String decode(String data) {
         // decode data via Base 64
-    	// use returned byte[] to do the invert of encode loop
-    	// return as String
-    	// byte[] result = ..
-    	byte[] result = new byte[0]; 
+        // use returned byte[] to do the invert of encode loop
+        // return as String
+        // byte[] result = ..
+
+        byte[] result = data.getBytes();
+        for (int i = 0; i < result.length; i++) {
+            result[i] -= (byte) 1;
+        }
         return new String(result);
     }
 }
