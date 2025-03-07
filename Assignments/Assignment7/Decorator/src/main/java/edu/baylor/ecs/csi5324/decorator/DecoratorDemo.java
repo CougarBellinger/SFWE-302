@@ -8,8 +8,8 @@ public class DecoratorDemo {
     public static void main(String[] args) {
         String salaryRecords = "Name,Salary\nJeff Bezos,100000\nElon Musk,912000";
         DataSourceDecorator encoded = new CompressionDecorator(
-                                         new EncryptionDecorator(
-                                             new FileDataSource("OutputDemo.txt")));
+                new EncryptionDecorator(
+                        new FileDataSource("OutputDemo.txt")));
         encoded.writeData(salaryRecords);
         DataSource plain = new FileDataSource("OutputDemo.txt");
 

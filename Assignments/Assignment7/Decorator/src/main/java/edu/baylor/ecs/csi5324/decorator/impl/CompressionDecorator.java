@@ -1,10 +1,14 @@
 package edu.baylor.ecs.csi5324.decorator.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
+import java.util.zip.InflaterOutputStream;
 
 import edu.baylor.ecs.csi5324.decorator.DataSource;
 import edu.baylor.ecs.csi5324.decorator.DataSourceDecorator;
@@ -56,7 +60,20 @@ public class CompressionDecorator extends DataSourceDecorator {
 		// ..
 		// return new String(bout.toByteArray());
 
-		return null;
+		// FIXME
+		byte[] data = Base64.getDecoder().decode(stringData);
+		try {
+			ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
+			InflaterInputStream iis = new InflaterInputStream(new ByteArrayInputStream(data));
+			byte[] buffer = new byte[512];
+			iis.read(buffer);
+			bout.write(buffer);
+			iis.close();
+			bout.close();
+			return new String(bout.toString());
+		} catch (IOException exception) {
+			return null;
+		}
 
 	}
 }
