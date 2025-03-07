@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
@@ -60,18 +61,25 @@ public class CompressionDecorator extends DataSourceDecorator {
 		// ..
 		// return new String(bout.toByteArray());
 
-		// FIXME
 		byte[] data = Base64.getDecoder().decode(stringData);
+
+		Inflater inflater = new Inflater();
+		inflater.setInput(data);
+
 		try {
 			ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
-			InflaterInputStream iis = new InflaterInputStream(new ByteArrayInputStream(data));
+
 			byte[] buffer = new byte[512];
-			iis.read(buffer);
+			inflater.inflate(buffer);
+
 			bout.write(buffer);
-			iis.close();
 			bout.close();
+
 			return new String(bout.toString());
 		} catch (IOException exception) {
+			return null;
+		} catch (DataFormatException e) {
+			e.printStackTrace();
 			return null;
 		}
 

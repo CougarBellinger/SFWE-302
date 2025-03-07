@@ -35,10 +35,12 @@ public class EncryptionDecorator extends DataSourceDecorator {
         // return as String
         // byte[] result = ..
 
-        byte[] result = data.getBytes();
+        byte[] result = Base64.getDecoder().decode(data);
+
         for (int i = 0; i < result.length; i++) {
             result[i] -= (byte) 1;
         }
+
         return new String(result);
     }
 }
