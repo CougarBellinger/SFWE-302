@@ -9,6 +9,10 @@ import java.net.UnknownHostException;
 
 public class IceCreamClient {
     public static void main(String[] args) {
+        if (args.length == 0) {
+            args[0] = "localhost";
+            args[1] = "2222";
+        }
         if (args.length != 2) {
             System.err.println("Usage: java IceCreamClient <host name> <port num>");
             System.exit(1);
