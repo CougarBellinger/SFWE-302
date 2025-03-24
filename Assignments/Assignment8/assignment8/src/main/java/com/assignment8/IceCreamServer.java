@@ -9,7 +9,9 @@ import java.net.Socket;
 
 public class IceCreamServer {
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
+        if (args.length == 0) {
+            args[0] = "2222";
+        } else if (args.length != 1) {
             System.err.println("Usage: java IceCreamServer <port number>");
             System.exit(1);
         }
