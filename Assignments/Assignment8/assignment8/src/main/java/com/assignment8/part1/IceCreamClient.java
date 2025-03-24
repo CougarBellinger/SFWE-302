@@ -8,8 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class IceCreamClient {
-    public static void main(String[] args_1) {
-        String[] args = { "localhost", "1234" };
+    public static void main(String[] args) {
         if (args.length != 2) {
             System.err.println("Usage: java IceCreamClient <host name> <port num>");
             System.exit(1);

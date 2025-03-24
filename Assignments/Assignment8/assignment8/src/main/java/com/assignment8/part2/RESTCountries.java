@@ -1,4 +1,4 @@
-package part2;
+package com.assignment8.part2;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 public class RESTCountries {
     public static void main(String[] argv) throws Exception {
-        String[] countryNames = {"Czechia", "Germany", "United States of America"};
+        String[] countryNames = { "Czechia", "Germany", "United States of America" };
 
         for (String countryName : countryNames) {
             String encodedCountryName = URLEncoder.encode(countryName, "UTF-8");
@@ -30,7 +30,7 @@ public class RESTCountries {
             if (result.startsWith("{\"message\":\"Page Not Found\"")) {
                 System.out.println("Error: Country data not found for " + countryName);
                 continue;
-}
+            }
             JSONArray ja = new JSONArray(result);
             JSONObject jo = ja.getJSONObject(0);
 

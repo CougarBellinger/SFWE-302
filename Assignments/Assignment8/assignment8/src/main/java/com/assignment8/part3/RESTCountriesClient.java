@@ -1,4 +1,4 @@
-package part3;
+package com.assignment8.part3;
 
 import java.io.BufferedReader;
 import java.io.IOException;
