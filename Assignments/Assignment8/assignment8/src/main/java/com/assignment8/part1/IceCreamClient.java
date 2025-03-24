@@ -1,4 +1,4 @@
-package com.assignment8;
+package com.assignment8.part1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,11 +8,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class IceCreamClient {
-    public static void main(String[] args) {
-        if (args.length == 0) {
-            args[0] = "localhost";
-            args[1] = "2222";
-        }
+    public static void main(String[] args_1) {
+        String[] args = { "localhost", "1234" };
         if (args.length != 2) {
             System.err.println("Usage: java IceCreamClient <host name> <port num>");
             System.exit(1);
