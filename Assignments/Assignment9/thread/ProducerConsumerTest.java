@@ -10,6 +10,5 @@ class ProducerConsumerTest {
 		// just a stress
 		// Thread.sleep(500);
 		c1.start();
-
 	}
 }
