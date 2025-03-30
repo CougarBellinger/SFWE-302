@@ -1,31 +1,33 @@
 package thread;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 class CubbyHole {
-	private int seq;
-	private boolean available = false;
+	private static int MAX = 10;
+	private Deque<Integer> buffer = new ArrayDeque<Integer>(MAX);
+	// private boolean available = false;
 
 	public synchronized int get() {
-		while (available == false) {
+		while (buffer.isEmpty()) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 			}
 		}
-		available = false;
 		notify();
-		return seq;
+		return buffer.pollFirst();
 	}
 
 	public synchronized void put(int value) {
-		while (available == true) {
+		while (!buffer.isEmpty()) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 			}
 		}
-		seq = value;
-		available = true;
+		buffer.addFirst(value);
 		notify();
-		
+
 	}
 }
