@@ -1,19 +1,23 @@
 package kwic;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collector;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public abstract class Filter extends Thread {
@@ -40,10 +44,13 @@ class InputFilter extends Filter {
             while ((charInput = fileInStream.read()) != -1) {
                 inString.append((char) charInput);
             }
-            outPipe.writePipe(inString.toString());
+            this.outPipe.writePipe(inString.toString());
 
+            System.out.println("=====================================");
             System.out.println("Input Filter:");
-            System.out.println(outPipe.readPipe());
+            System.out.println("=====================================");
+            System.out.println(inString.toString());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,18 +71,18 @@ class CircularShifterFilter extends Filter {
     @Override
     public void run() {
         try {
-            // Split lines
-            lines = inPipe.readPipe().split("\\R");
+            lines = this.inPipe.readPipe().split("\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         ExecutorService executer = Executors.newFixedThreadPool(lines.length); // Thread pool for concurrent processing
-
         shiftedLines = new CopyOnWriteArraySet<>(); // Allows threads to mutate shared list
+
+        List<Future<?>> futures = new ArrayList<>(); // For retreiving finals from the executers.
         for (String line : lines) {
 
-            executer.submit(() -> {
+            Future<?> future = executer.submit(() -> {
                 Deque<String> shiftLine = new ArrayDeque<>();
                 shiftLine.addAll(Arrays.asList(line.split(" ")));
 
@@ -84,16 +91,37 @@ class CircularShifterFilter extends Filter {
                     shiftLine.addLast(shiftLine.poll());
                     shiftedLines.add(shiftLine.stream().collect(Collectors.joining(" ")));
                 }
+
             });
+
+            futures.add(future);
 
         }
 
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        executer.shutdown();
+
+        stringOutBuffer = new StringBuffer();
         stringOutBuffer.append(shiftedLines.stream().collect(Collectors.joining("\n")));
+        // System.out.println(stringOutBuffer);
+
+        System.out.println("=====================================");
+        System.out.println("CIRCULAR SHIFTER FILTER");
+        System.out.println("=====================================");
         try {
-            outPipe.writePipe(stringOutBuffer.toString());
+            this.outPipe.writePipe(stringOutBuffer.toString());
+            System.out.println(stringOutBuffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 }
@@ -101,11 +129,35 @@ class CircularShifterFilter extends Filter {
 class AlphabetizerFilter extends Filter {
 
     public AlphabetizerFilter(Pipe shifterToAlphaPipe, Pipe alphaToOutPipe) {
-        // TODO Auto-generated constructor stub
+        this.inPipe = shifterToAlphaPipe;
+        this.outPipe = alphaToOutPipe;
     }
 
     @Override
     public void run() {
+        String lineAll = null;
+        try {
+            lineAll = this.inPipe.readPipe();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<String> lines = new ArrayList<>();
+        lines.addAll(Arrays.asList(lineAll.split("\n")));
+        Collections.sort(lines, String.CASE_INSENSITIVE_ORDER);
+        lineAll = lines.stream().collect(Collectors.joining("\n"));
+
+        System.out.println("=====================================");
+        System.out.println("ALPHABETIZER FILTER");
+        System.out.println("=====================================");
+        try {
+            outPipe.writePipe(lineAll);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(lineAll);
 
     }
 
@@ -114,12 +166,34 @@ class AlphabetizerFilter extends Filter {
 class OutputFilter extends Filter {
 
     public OutputFilter(Pipe alphaToOutPipe) {
-        // TODO Auto-generated constructor stub
+        this.inPipe = alphaToOutPipe;
     }
 
     @Override
     public void run() {
+        String outString = null;
+        String fileName = "kwic/KWIC_documents.txt";
+        try {
+            outString = inPipe.readPipe();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        System.out.println("=====================================");
+        System.out.println("ALPHABETIZER FILTER");
+        System.out.println("=====================================");
+        System.out.printf("File: \"%s\"\n", fileName);
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+            for (char c : outString.toCharArray()) {
+                fileOutputStream.write((int) c);
+            }
+            fileOutputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

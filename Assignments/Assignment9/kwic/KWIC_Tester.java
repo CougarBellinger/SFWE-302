@@ -24,18 +24,19 @@ public class KWIC_Tester {
         Filter alphaFilter = new AlphabetizerFilter(shifterToAlphaPipe, alphaToOutPipe);
         Filter outputFilter = new OutputFilter(alphaToOutPipe);
 
-        inputFilter.start();
-        // shifterFilter.start();
-        // alphaFilter.start();
-        // outputFilter.start();
+        try {
+            inputFilter.start();
+            shifterFilter.start();
+            alphaFilter.start();
+            outputFilter.start();
 
-        // try {
-        // inputFilter.join();
-        // shifterFilter.join();
-        // alphaFilter.join();
-        // outputFilter.join();
-        // } catch (InterruptedException e) {
-        // e.printStackTrace();
-        // }
+            outputFilter.join();
+            inputFilter.join();
+            shifterFilter.join();
+            alphaFilter.join();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
