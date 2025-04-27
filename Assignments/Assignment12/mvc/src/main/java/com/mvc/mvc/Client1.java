@@ -24,23 +24,30 @@ public class Client1 implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         String input;
-        
+        boolean validInput = false;
+
         while(true){
-            System.out.println("Enter Person details (name, email, age):"); 
+            System.out.println("Enter Person details <name,email,age> (q to quit):"); 
             input = scanner.nextLine();
 
-            if(input.split(",").length != 3){
+            validInput = input.matches("[a-zA-Z]+,[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,},\\d+");
+
+            if (input.equalsIgnoreCase("q")) {
+                System.out.println("Client1 quiting...");
+                break;
+            }
+            else if(!validInput){
                 System.out.println("Invalid input.");
                 continue;
             }
 
-            break;
+            System.out.println("Sending message...");
+            rabbitTemplate.convertAndSend(MvcApplication.topicExchangeName,
+                    "foo.bar.baz",
+                    input);
+            receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
         }
-
-        System.out.println("Sending message...");
-        rabbitTemplate.convertAndSend(MvcApplication.topicExchangeName,
-        "foo.bar.baz",
-        input);
-        receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        scanner.close();
+        System.out.println("Client1 successfully quit. Goodbye!");
     }
 }
