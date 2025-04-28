@@ -1,8 +1,0 @@
-com/mvc/mvc/Receiver.class
-com/mvc/mvc/MvcApplication.class
-com/mvc/mvc/Person.class
-com/mvc/mvc/PersonController.class
-com/mvc/mvc/PersonRepository.class
-com/mvc/mvc/PersonService.class
-com/mvc/mvc/PersonRestController.class
-com/mvc/mvc/Client1.class

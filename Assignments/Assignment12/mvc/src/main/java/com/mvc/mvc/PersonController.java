@@ -3,11 +3,14 @@ package com.mvc.mvc;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.validation.Valid;
 
@@ -38,5 +41,11 @@ public class PersonController {
 		}
 		personService.addPerson(person);
 		return "redirect:/";
+	}
+
+	@PostMapping("/api/people")
+	public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person) {
+		Person savedPerson = personService.addPerson(person);
+		return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
 	}
 }

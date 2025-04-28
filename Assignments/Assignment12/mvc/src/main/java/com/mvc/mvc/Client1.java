@@ -49,5 +49,6 @@ public class Client1 implements CommandLineRunner {
         }
         scanner.close();
         System.out.println("Client1 successfully quit. Goodbye!");
+        return;
     }
 }
